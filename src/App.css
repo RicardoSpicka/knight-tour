@@ -1,0 +1,811 @@
+
+/* =========================================================
+   KNIGHT'S TOUR
+   Estilos principais da aplicação
+   ========================================================= */
+
+/* ---------- Variáveis e estrutura geral ---------- */
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+.app {
+  --bg: #101411;
+  --panel: #191e19;
+  --border: #303830;
+  --text: #f0f1e9;
+  --muted: #9ba598;
+  --accent: #c8f169;
+
+  width: min(1180px, 100%);
+  margin: 0 auto;
+  padding: 28px 36px 20px;
+  color: var(--text);
+  box-sizing: border-box;
+}
+
+/* Mantém o cálculo das dimensões consistente. */
+.app *,
+.app *::before,
+.app *::after {
+  box-sizing: border-box;
+}
+
+/* ---------- Cabeçalho e alinhamentos ---------- */
+
+.topbar,
+.brand,
+.board-heading,
+.progress-caption,
+.stat-row,
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.topbar {
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--border);
+}
+
+.brand {
+  justify-content: flex-start;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.brand-icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  color: #12170f;
+  background: var(--accent);
+  font-size: 26px;
+}
+
+.version,
+.eyebrow,
+.panel-label,
+.board-coordinates {
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+}
+
+.version {
+  color: var(--muted);
+}
+
+/* ---------- Título e apresentação ---------- */
+
+.hero {
+  max-width: 1500px;
+  padding: 24px 0 32px;
+}
+
+.eyebrow {
+  color: var(--accent);
+}
+
+.hero h1 {
+  margin: 12px 0;
+  font-size: clamp(42px, 5.5vw, 68px);
+  line-height: 1.08;
+  letter-spacing: -2.5px;
+}
+
+.subtitle {
+  max-width: 800px;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.8;
+}
+
+/* ---------- Layout do jogo ---------- */
+
+.game-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(260px, 0.75fr);
+  align-items: start;
+  gap: 24px;
+}
+
+.board-panel,
+.status-card,
+.action-card,
+.message-card {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--panel);
+}
+
+.board-panel {
+  min-width: 0;
+  padding: 22px;
+}
+
+.board-heading {
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.board-heading h2 {
+  margin: 6px 0 0;
+  font-size: 24px;
+}
+
+.move-count {
+  color: var(--accent);
+  font-size: 22px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* =========================================================
+   TABULEIRO
+   As linhas e colunas possuem dimensões iguais.
+   O conteúdo das casas não altera o tamanho do tabuleiro.
+   ========================================================= */
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  grid-template-rows: repeat(8, minmax(0, 1fr));
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  border: 4px solid #303a2e;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+/* ---------- Casas do tabuleiro ---------- */
+
+.square {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Impede o conteúdo de alterar as dimensões da casa. */
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+
+  border: 0;
+  border-radius: 0;
+  box-sizing: border-box;
+  line-height: 1;
+
+  cursor: pointer;
+  transition:
+    filter 120ms ease,
+    box-shadow 120ms ease;
+}
+
+
+/* Casa que não pode mais ser alcançada sem repetir movimentos */
+.square.dark.unreachable,
+.square.light.unreachable {
+  background-color: #dc2626;
+  color: #ffffff;
+  border-color: #b91c1c;
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.18);
+}
+
+/* Mantém o destaque vermelho ao passar o mouse */
+.square.dark.unreachable:hover,
+.square.light.unreachable:hover {
+  background-color: #b91c1c;
+  color: #ffffff;
+}
+
+
+/* Cores alternadas. */
+
+.square.light {
+  background: #d9dfc9;
+  color: #293227;
+}
+
+.square.dark {
+  background: #78896e;
+  color: #f0f3e7;
+}
+
+.square:disabled {
+  cursor: default;
+}
+
+.square:not(:disabled):hover {
+  filter: brightness(1.12);
+}
+
+/* ---------- Casa atual ---------- */
+
+.square.current {
+  background: var(--accent);
+  color: #182014;
+  box-shadow: inset 0 0 0 3px #f4ffd9;
+  z-index: 1;
+
+  /* O destaque nunca aumenta a casa. */
+  transform: none;
+}
+
+/* ---------- Dicas de movimento ---------- */
+
+.square.hint:not(.current) {
+  box-shadow: inset 0 0 0 3px rgba(200, 241, 105, 0.9);
+}
+
+/* Marcador de destino permitido. */
+
+.hint-dot {
+  position: absolute;
+  width: 24%;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  background: #d9ff86;
+  box-shadow: 0 0 0 3px rgba(30, 45, 23, 0.16);
+  pointer-events: none;
+}
+
+/* ---------- Cavalo ---------- */
+
+/*
+   O cavalo fica centralizado e fora do fluxo de layout.
+   O tamanho da peça não altera a altura da casa.
+*/
+
+.knight {
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+
+  font-size: clamp(24px, 4vw, 43px);
+  font-weight: 400;
+  line-height: 1;
+  white-space: nowrap;
+
+  pointer-events: none;
+  user-select: none;
+
+  filter: drop-shadow(0 2px 1px rgba(0, 0, 0, 0.15));
+}
+
+/* ---------- Números das casas visitadas ---------- */
+
+/*
+   A numeração usa posicionamento absoluto para não
+   disputar espaço com o cavalo dentro da casa.
+*/
+
+
+/* Numeração centralizada nas casas já visitadas. */
+.visit-number {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0;
+  padding: 0;
+
+  font-size: clamp(18px, 2.2vw, 26px);
+  font-weight: 800;
+  line-height: 1;
+  opacity: 0.9;
+
+  pointer-events: none;
+  user-select: none;
+}
+
+
+/* ---------- Coordenadas ---------- */
+
+.board-coordinates {
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+  padding-top: 16px;
+  font-size: 14px;
+}
+
+/* ---------- Painel lateral ---------- */
+
+.sidebar {
+  display: grid;
+  align-content: start;
+  gap: 16px;
+  min-width: 0;
+}
+
+.status-card,
+.action-card {
+  padding: 22px;
+}
+
+.panel-label {
+  display: block;
+}
+
+/* ---------- Indicador de progresso ---------- */
+
+.progress-number {
+  margin: 18px 0;
+  font-size: 58px;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -2px;
+  font-variant-numeric: tabular-nums;
+}
+
+.progress-number small {
+  margin-left: 3px;
+  color: var(--accent);
+  font-size: 26px;
+}
+
+.progress-track {
+  width: 100%;
+  height: 10px;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #333a32;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--accent);
+  transition: width 180ms ease;
+}
+
+.progress-caption {
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 15px;
+  letter-spacing: 0;
+}
+
+.progress-caption strong,
+.stat-row strong {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.stat-divider {
+  height: 1px;
+  margin: 20px 0;
+  background: var(--border);
+}
+
+.stat-row {
+  gap: 12px;
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 16px;
+}
+
+.stat-row strong {
+  font-size: 17px;
+}
+
+/* ---------- Botões de ação ---------- */
+
+.action-card {
+  display: grid;
+  gap: 12px;
+}
+
+.action-card > .panel-label {
+  margin-bottom: 4px;
+}
+
+.toggle-button,
+.primary-button,
+.secondary-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  width: 100%;
+  min-height: 50px;
+  padding: 12px 14px;
+
+  border: 1px solid var(--border);
+  border-radius: 9px;
+
+  font: inherit;
+  font-size: 16px;
+  line-height: 1.3;
+
+  cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    filter 120ms ease;
+}
+
+.toggle-button {
+  justify-content: flex-start;
+  color: var(--muted);
+  background: transparent;
+}
+
+.toggle-button.active {
+  color: var(--accent);
+}
+
+.toggle-state {
+  margin-left: auto;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.primary-button {
+  border-color: var(--accent);
+  color: #182014;
+  background: var(--accent);
+  font-weight: 800;
+}
+
+.secondary-button {
+  color: var(--text);
+  background: transparent;
+}
+
+.primary-button:hover,
+.secondary-button:hover,
+.toggle-button:hover {
+  filter: brightness(1.1);
+}
+
+.toggle-button:focus-visible,
+.primary-button:focus-visible,
+.secondary-button:focus-visible,
+.square:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -3px;
+}
+
+.secondary-button:disabled,
+.primary-button:disabled,
+.toggle-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+/* ---------- Mensagens do jogo ---------- */
+
+.message-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 18px;
+}
+
+.message-icon {
+  flex-shrink: 0;
+  color: var(--accent);
+  font-size: 22px;
+}
+
+.message-card strong {
+  font-size: 17px;
+  line-height: 1.4;
+}
+
+.message-card p {
+  margin: 7px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.message-card.success {
+  border-color: #708c43;
+}
+
+.message-card.warning .message-icon {
+  color: #f0bd69;
+}
+
+/* ---------- Rodapé ---------- */
+
+.footer {
+  gap: 12px;
+  margin-top: 30px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* =========================================================
+   RESPONSIVIDADE
+   ========================================================= */
+
+/* Tablets e telas menores. */
+
+@media (max-width: 900px) {
+  .app {
+    padding: 24px;
+  }
+
+  .game-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+  }
+
+  .board-panel {
+    padding: 16px;
+  }
+
+  .sidebar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .action-card {
+    grid-column: 1 / -1;
+  }
+
+  .knight {
+    font-size: clamp(28px, 5vw, 43px);
+  }
+}
+
+/* Celulares. */
+
+@media (max-width: 560px) {
+  .app {
+    padding: 20px 14px;
+  }
+
+  .hero {
+    padding: 26px 0 24px;
+  }
+
+  .hero h1 {
+    font-size: clamp(36px, 9vw, 48px);
+    line-height: 1.1;
+    letter-spacing: -1.5px;
+  }
+
+  .subtitle {
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  .brand {
+    font-size: 15px;
+    letter-spacing: 1.5px;
+  }
+
+  .board-panel {
+    padding: 10px;
+    border-radius: 12px;
+  }
+
+  .board-heading {
+    gap: 8px;
+    margin-bottom: 14px;
+    padding: 2px;
+  }
+
+  .board-heading h2 {
+    font-size: 21px;
+  }
+
+  .move-count {
+    font-size: 18px;
+  }
+
+  .board {
+    border-width: 3px;
+  }
+
+  .knight {
+    font-size: clamp(22px, 7vw, 36px);
+  }
+
+  .visit-number {
+    top: 2px;
+    left: 3px;
+    font-size: clamp(9px, 2.8vw, 13px);
+  }
+
+  .board-coordinates {
+    padding-top: 12px;
+    font-size: 12px;
+    letter-spacing: 1px;
+  }
+
+  .sidebar {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .action-card {
+    grid-column: auto;
+  }
+
+  .status-card,
+  .action-card {
+    padding: 18px;
+  }
+
+  .progress-number {
+    font-size: 52px;
+  }
+
+  .footer {
+    flex-wrap: wrap;
+    justify-content: center;
+    font-size: 12px;
+    text-align: center;
+  }
+}
+
+/* Celulares muito estreitos. */
+
+@media (max-width: 380px) {
+  .app {
+    padding: 16px 10px;
+  }
+
+  .board-panel {
+    padding: 7px;
+  }
+
+  .board {
+    border-width: 2px;
+  }
+
+  .knight {
+    font-size: clamp(20px, 7vw, 27px);
+  }
+
+  .hint-dot {
+    width: 20%;
+  }
+
+
+  .progress-number {
+    font-size: 46px;
+  }
+}
+
+
+/* =========================================================
+   Layout compacto para monitores
+   ========================================================= */
+
+@media (min-width: 901px) {
+  .app {
+    padding: 10px 24px 8px;
+  }
+
+  .topbar {
+    padding-bottom: 8px;
+  }
+
+  .hero {
+    padding: 8px 0 12px;
+  }
+
+  .hero h1 {
+    margin: 4px 0;
+    font-size: clamp(32px, 3.2vw, 42px);
+    line-height: 1.08;
+  }
+
+  .subtitle {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .game-layout {
+    grid-template-columns: minmax(0, 1.25fr) minmax(250px, 0.75fr);
+    gap: 16px;
+  }
+
+  /* Limita o tamanho do painel do tabuleiro pela altura da janela. */
+  .board-panel {
+    width: min(100%, calc(100dvh - 390px));
+    justify-self: center;
+    padding: 12px;
+  }
+
+  .board-heading {
+    margin-bottom: 8px;
+  }
+
+  .board-heading h2 {
+    font-size: 20px;
+  }
+
+  .board-coordinates {
+    padding-top: 8px;
+  }
+
+  .sidebar {
+    gap: 8px;
+  }
+
+  .status-card,
+  .action-card {
+    padding: 12px;
+  }
+
+  .progress-number {
+    margin: 8px 0;
+    font-size: 42px;
+  }
+
+  .stat-divider {
+    margin: 8px 0;
+  }
+
+  .stat-row {
+    margin-top: 6px;
+    font-size: 13px;
+  }
+
+  .stat-row strong {
+    font-size: 14px;
+  }
+
+  .action-card {
+    gap: 6px;
+  }
+
+  .toggle-button,
+  .primary-button,
+  .secondary-button {
+    min-height: 36px;
+    padding: 6px 10px;
+    font-size: 14px;
+  }
+
+  .message-card {
+    padding: 8px;
+  }
+
+  .message-card p {
+    margin-top: 4px;
+    font-size: 12px;
+    line-height: 1.35;
+  }
+
+  .footer {
+    margin-top: 8px;
+    padding-top: 6px;
+    font-size: 12px;
+  }
+}
