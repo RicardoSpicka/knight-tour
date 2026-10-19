@@ -144,8 +144,11 @@ Esse comando gera a versão otimizada da aplicação para distribuição.
 - [ ] Adicionar um modo de resolução automática.
 - [ ] Criar níveis de dificuldade e desafios personalizados.
 - [ ] Desenvolver estatísticas de desempenho e histórico de partidas.
-- [ ] Aprimorar a experiência em dispositivos móveis.
+- [ ] Aprimorar a experiência em dispositivos móveis (responsividade).
 - [ ] Ampliar os testes automatizados da lógica de movimentação.
+- [ ] **Adicionar um botão de ajuda (`?`)** com as regras do jogo e uma legenda explicando as cores, os ícones e os indicadores da interface.
+- [ ] **Realizar o deploy da aplicação na web**, disponibilizando uma versão pública e acessível pelo navegador.
+
 
 ## 📚 Aprendizados
 
