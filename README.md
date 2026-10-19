@@ -1,75 +1,172 @@
-# React + TypeScript + Vite
+# ♞ Knight's Tour — Desafio do Cavalo
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<p align="center">
+  Um desafio de lógica, estratégia e programação inspirado no movimento do cavalo no xadrez.
+</p>
 
-Currently, two official plugins are available:
+<p align="center">
+  <img src="https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB" alt="React" />
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript" />
+  <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite" />
+  <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3" />
+</p>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+<p align="center">
+  <a href="https://github.com/RicardoSpicka/knight-tour">Repositório</a>
+  ·
+  <a href="https://github.com/RicardoSpicka/knight-tour/issues">Reportar problema</a>
+</p>
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 📌 Sobre o projeto
 
-## Expanding the ESLint configuration
+O **Knight's Tour** é uma aplicação interativa baseada no problema matemático conhecido como *Passeio do Cavalo* (*Knight's Tour*), um desafio clássico de lógica e teoria dos grafos.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+O objetivo é movimentar uma peça de cavalo por um tabuleiro de xadrez de 8 × 8 casas, respeitando as regras tradicionais do movimento e buscando visitar todas as 64 casas sem repetir nenhuma.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+O projeto foi desenvolvido como parte da minha jornada de aprendizado em desenvolvimento de software, com foco na aplicação prática de **React, TypeScript, gerenciamento de estado e lógica de programação**.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Mais do que construir uma interface, a proposta é transformar um problema lógico em uma experiência visual, interativa e compreensível.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## 🎯 Objetivos
 
+- Aplicar conceitos de desenvolvimento frontend em uma aplicação funcional.
+- Implementar e validar regras de movimentação do cavalo.
+- Trabalhar com estados, histórico de jogadas e atualização dinâmica da interface.
+- Desenvolver mecanismos para identificar situações problemáticas durante a partida.
+- Praticar organização de código, componentização visual e experiência do usuário.
+- Construir um projeto demonstrável para portfólio profissional.
+
+## ✨ Funcionalidades
+
+| Funcionalidade | Descrição |
+|---|---|
+| ♞ Tabuleiro interativo | Tabuleiro de xadrez com 64 casas. |
+| ♟️ Movimentação válida | Permite movimentar o cavalo conforme as regras do xadrez. |
+| 💡 Indicação de jogadas | Destaca as casas para as quais o cavalo pode se movimentar. |
+| 📊 Acompanhamento da partida | Exibe informações sobre o progresso do desafio. |
+| ↩️ Desfazer jogada | Permite voltar à posição anterior por meio do histórico. |
+| 🔄 Reiniciar partida | Limpa o progresso para começar novamente. |
+| 🚧 Detecção de becos sem saída | Identifica quando não existem movimentos válidos disponíveis. |
+| 🔴 Identificação de casas isoladas | Destaca casas não visitadas que ficaram desconectadas da posição atual pela análise de conectividade. |
+| 🏆 Conclusão do desafio | Reconhece quando todas as casas foram visitadas. |
+| 📈 Contador de retrocessos | Registra quantas vezes o jogador utilizou a opção de desfazer. |
+| 💬 Mensagens dinâmicas | Apresenta orientações e alertas conforme o estado da partida. |
+
+## 🛠️ Tecnologias utilizadas
+
+- **React** — construção da interface por meio de componentes.
+- **TypeScript** — tipagem estática e maior previsibilidade no código.
+- **Vite** — ambiente de desenvolvimento e ferramenta de build.
+- **CSS3** — estilização do tabuleiro, dos controles e dos indicadores visuais.
+- **Git e GitHub** — versionamento e publicação do código-fonte.
+
+## 🧠 Conceitos aplicados
+
+### Lógica de movimentação
+
+O movimento do cavalo é representado por deslocamentos que combinam duas casas em uma direção e uma casa na direção perpendicular.
+
+A aplicação valida cada movimento, impedindo que o jogador saia dos limites do tabuleiro ou escolha uma casa que não corresponda a um movimento válido.
+
+### Gerenciamento de estado
+
+O React controla informações como a posição atual do cavalo, o histórico de movimentos, as casas visitadas e os indicadores da partida.
+
+### Análise de conectividade
+
+O projeto utiliza uma busca em largura (*Breadth-First Search — BFS*) para identificar casas não visitadas que não podem mais ser alcançadas a partir da posição atual, considerando os caminhos disponíveis pelas casas não visitadas.
+
+Essa análise auxilia o jogador a reconhecer possíveis problemas na rota. Ela não representa, por si só, um solucionador completo do problema do Passeio do Cavalo.
+
+## 🚀 Como executar o projeto
+
+### Pré-requisitos
+
+- [Node.js](https://nodejs.org/) instalado.
+- npm, normalmente incluído na instalação do Node.js.
+- Git, caso queira clonar o repositório.
+
+### 1. Clonar o repositório
+
+```bash
+git clone https://github.com/RicardoSpicka/knight-tour.git
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+### 2. Acessar a pasta
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+cd knight-tour
 ```
+
+### 3. Instalar as dependências
+
+```bash
+npm install
+```
+
+### 4. Iniciar o ambiente de desenvolvimento
+
+```bash
+npm run dev
+```
+
+O Vite exibirá no terminal o endereço local para abrir a aplicação no navegador, normalmente:
+
+```text
+http://localhost:5173
+```
+
+### 5. Gerar a versão de produção
+
+```bash
+npm run build
+```
+
+Esse comando gera a versão otimizada da aplicação para distribuição.
+
+## 🎮 Como jogar
+
+1. Escolha uma casa do tabuleiro para iniciar o desafio.
+2. Observe as casas destacadas como movimentos válidos.
+3. Selecione uma das casas permitidas para movimentar o cavalo.
+4. Acompanhe as casas visitadas e os indicadores de progresso.
+5. Utilize a opção de desfazer caso queira explorar outra rota.
+6. Procure visitar todas as 64 casas sem repetir nenhuma.
+7. Reinicie a partida para tentar uma nova sequência de movimentos.
+
+**Dica:** planejar os próximos movimentos é importante. Uma jogada válida no momento pode limitar as possibilidades disponíveis mais adiante.
+
+## 🗺️ Próximas melhorias
+
+- [ ] Implementar um algoritmo capaz de encontrar uma solução completa para o Passeio do Cavalo.
+- [ ] Adicionar um modo de resolução automática.
+- [ ] Criar níveis de dificuldade e desafios personalizados.
+- [ ] Desenvolver estatísticas de desempenho e histórico de partidas.
+- [ ] Aprimorar a experiência em dispositivos móveis.
+- [ ] Ampliar os testes automatizados da lógica de movimentação.
+
+## 📚 Aprendizados
+
+O desenvolvimento deste projeto permite explorar a relação entre lógica de programação e experiência do usuário, trabalhando com regras, estados, validações e feedback visual em tempo real.
+
+Também reforça a importância de antecipar consequências: no Passeio do Cavalo, uma movimentação pode ser válida individualmente e, ainda assim, comprometer a conclusão do desafio.
+
+O projeto faz parte de uma iniciativa contínua de desenvolvimento de aplicações práticas para consolidar conhecimentos técnicos e construir um portfólio de software.
+
+## 👨‍💻 Autor
+
+**Ricardo Spicka**
+
+Desenvolvedor em constante evolução, com interesse em lógica de programação, desenvolvimento de aplicações, resolução de problemas e construção de soluções tecnológicas.
+
+<p align="center">
+  <a href="https://github.com/RicardoSpicka">GitHub</a>
+</p>
+
+---
+
+<p align="center">
+  ♞ Desenvolvido com React, TypeScript e muita lógica.
+</p>
