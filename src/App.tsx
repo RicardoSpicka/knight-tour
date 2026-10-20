@@ -688,8 +688,27 @@ function App() {
       )}
 
       <footer className="footer">
-        <span>KNIGHT'S TOUR © 2026</span>
-        <span>UM DESAFIO DE PACIÊNCIA E ESTRATÉGIA</span>
+        <span>Desenvolvido por Ricardo Spicka</span>
+
+        <div className="footer-links">
+          <a
+            href="https://github.com/RicardoSpicka"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub de Ricardo Spicka"
+          >
+            GitHub ↗
+          </a>
+
+          <a
+            href="https://www.linkedin.com/in/ricardo-spicka-b79049160"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="LinkedIn de Ricardo Spicka"
+          >
+            LinkedIn ↗
+          </a>
+        </div>
       </footer>
     </main>
   )

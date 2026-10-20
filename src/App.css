@@ -544,8 +544,34 @@
   padding-top: 20px;
   border-top: 1px solid var(--border);
   color: var(--muted);
-  font-size: 14px;
+  font-size: 18px;
   line-height: 1.7;
+}
+
+.footer-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.footer-links a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 120ms ease;
+}
+
+.footer-links a:hover {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.footer-links a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 3px;
 }
 
 
@@ -624,27 +650,6 @@
 .rules-button:hover {
   filter: brightness(1.08);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 .rules-button:focus-visible,
 .rules-close:focus-visible {
