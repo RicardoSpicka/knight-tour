@@ -21,38 +21,46 @@
 
 ## 📌 Sobre o projeto
 
-O **Knight's Tour** é uma aplicação interativa baseada no problema matemático conhecido como *Passeio do Cavalo* (*Knight's Tour*), um desafio clássico de lógica e teoria dos grafos.
+O **Knight's Tour** é uma aplicação interativa baseada no problema matemático conhecido como *Passeio do Cavalo* (*Knight's Tour*), um desafio clássico relacionado à teoria dos grafos e à busca por caminhos.
 
-O objetivo é movimentar uma peça de cavalo por um tabuleiro de xadrez de 8 × 8 casas, respeitando as regras tradicionais do movimento e buscando visitar todas as 64 casas sem repetir nenhuma.
+O objetivo é movimentar um cavalo por um tabuleiro, visitando todas as casas sem repetir nenhuma, respeitando as regras tradicionais de movimentação do xadrez.
 
-O projeto foi desenvolvido como parte da minha jornada de aprendizado em desenvolvimento de software, com foco na aplicação prática de **React, TypeScript, gerenciamento de estado e lógica de programação**.
+A aplicação permite explorar diferentes tamanhos de tabuleiro, acompanhar o progresso das jogadas e utilizar um solucionador automático para encontrar um percurso válido.
+
+O projeto foi desenvolvido como parte da minha jornada de aprendizado em desenvolvimento de software, com foco na aplicação prática de **React, TypeScript, algoritmos, gerenciamento de estado e experiência do usuário**.
 
 Mais do que construir uma interface, a proposta é transformar um problema lógico em uma experiência visual, interativa e compreensível.
 
 ## 🎯 Objetivos
 
 - Aplicar conceitos de desenvolvimento frontend em uma aplicação funcional.
-- Implementar e validar regras de movimentação do cavalo.
-- Trabalhar com estados, histórico de jogadas e atualização dinâmica da interface.
-- Desenvolver mecanismos para identificar situações problemáticas durante a partida.
-- Praticar organização de código, componentização visual e experiência do usuário.
+- Implementar e validar as regras de movimentação do cavalo.
+- Trabalhar com gerenciamento de estado e histórico de jogadas.
+- Desenvolver mecanismos de análise de conectividade do tabuleiro.
+- Implementar um algoritmo de busca para resolver o Passeio do Cavalo.
+- Aplicar técnicas de otimização de busca para melhorar a exploração dos movimentos.
+- Praticar organização de código, validação de dados e experiência do usuário.
 - Construir um projeto demonstrável para portfólio profissional.
 
 ## ✨ Funcionalidades
 
 | Funcionalidade | Descrição |
 |---|---|
-| ♞ Tabuleiro interativo | Tabuleiro de xadrez com 64 casas. |
-| ♟️ Movimentação válida | Permite movimentar o cavalo conforme as regras do xadrez. |
-| 💡 Indicação de jogadas | Destaca as casas para as quais o cavalo pode se movimentar. |
-| 📊 Acompanhamento da partida | Exibe informações sobre o progresso do desafio. |
-| ↩️ Desfazer jogada | Permite voltar à posição anterior por meio do histórico. |
-| 🔄 Reiniciar partida | Limpa o progresso para começar novamente. |
-| 🚧 Detecção de becos sem saída | Identifica quando não existem movimentos válidos disponíveis. |
-| 🔴 Identificação de casas isoladas | Destaca casas não visitadas que ficaram desconectadas da posição atual pela análise de conectividade. |
+| ♞ Tabuleiro interativo | Permite jogar em tabuleiros de 5×5, 6×6, 7×7 e 8×8. |
+| ♟️ Movimentação válida | Valida os movimentos do cavalo conforme as regras do xadrez. |
+| 💡 Sugestões de movimentos | Destaca as casas disponíveis para a próxima jogada. |
+| ↩️ Desfazer jogada | Permite retornar a uma posição anterior utilizando o histórico. |
+| 🔄 Reiniciar partida | Reinicia o desafio para explorar uma nova sequência de movimentos. |
+| 🚧 Detecção de becos sem saída | Identifica situações em que não há movimentos válidos disponíveis. |
+| 🔴 Análise de casas isoladas | Identifica casas não visitadas que ficaram desconectadas das possibilidades de continuação da rota. |
+| 🤖 Solucionador automático | Busca um percurso que visite todas as casas sem repetições. |
+| ⏸️ Controle da resolução | Permite pausar e retomar a execução automática. |
+| ⚡ Controle de velocidade | Permite ajustar a velocidade da animação da solução. |
+| ❌ Cancelamento da resolução | Permite interromper a execução automática. |
+| 📊 Acompanhamento do progresso | Apresenta informações sobre o andamento do desafio. |
 | 🏆 Conclusão do desafio | Reconhece quando todas as casas foram visitadas. |
-| 📈 Contador de retrocessos | Registra quantas vezes o jogador utilizou a opção de desfazer. |
 | 💬 Mensagens dinâmicas | Apresenta orientações e alertas conforme o estado da partida. |
+| 📖 Como jogar | Disponibiliza um modal com as regras e orientações para utilizar a aplicação. |
 
 ## 🛠️ Tecnologias utilizadas
 
@@ -60,25 +68,47 @@ Mais do que construir uma interface, a proposta é transformar um problema lógi
 - **TypeScript** — tipagem estática e maior previsibilidade no código.
 - **Vite** — ambiente de desenvolvimento e ferramenta de build.
 - **CSS3** — estilização do tabuleiro, dos controles e dos indicadores visuais.
-- **Git e GitHub** — versionamento e publicação do código-fonte.
+- **Git e GitHub** — versionamento e hospedagem do código-fonte.
 
-## 🧠 Conceitos aplicados
+## 🧠 Conceitos e algoritmos aplicados
 
-### Lógica de movimentação
+### 1. Lógica de movimentação
 
 O movimento do cavalo é representado por deslocamentos que combinam duas casas em uma direção e uma casa na direção perpendicular.
 
-A aplicação valida cada movimento, impedindo que o jogador saia dos limites do tabuleiro ou escolha uma casa que não corresponda a um movimento válido.
+A aplicação valida os movimentos, impedindo deslocamentos para fora dos limites do tabuleiro ou para casas que não correspondam a um movimento válido.
 
-### Gerenciamento de estado
+### 2. Gerenciamento de estado
 
-O React controla informações como a posição atual do cavalo, o histórico de movimentos, as casas visitadas e os indicadores da partida.
+O React controla informações como:
 
-### Análise de conectividade
+- Posição atual do cavalo.
+- Casas visitadas e histórico de movimentos.
+- Sugestões de jogadas.
+- Progresso da partida.
+- Estado da resolução automática, incluindo pausa e cancelamento.
 
-O projeto utiliza uma busca em largura (*Breadth-First Search — BFS*) para identificar casas não visitadas que não podem mais ser alcançadas a partir da posição atual, considerando os caminhos disponíveis pelas casas não visitadas.
+Essa estrutura mantém a interface sincronizada com as ações do jogador e com a execução do solucionador.
 
-Essa análise auxilia o jogador a reconhecer possíveis problemas na rota. Ela não representa, por si só, um solucionador completo do problema do Passeio do Cavalo.
+### 3. Busca com backtracking
+
+O solucionador utiliza **backtracking** para explorar sequências de movimentos possíveis.
+
+Quando um caminho não permite completar o desafio, o algoritmo retorna a uma posição anterior e tenta uma alternativa. Essa abordagem permite explorar diferentes possibilidades até encontrar uma solução ou concluir que não foi possível encontrar uma dentro da busca realizada.
+
+### 4. Heurística de Warnsdorff
+
+Para orientar a escolha dos próximos movimentos, o algoritmo utiliza a **heurística de Warnsdorff**, que prioriza casas com menor quantidade de movimentos futuros disponíveis.
+
+Essa estratégia ajuda a explorar primeiro caminhos que tendem a deixar menos opções restritas para o final do percurso, reduzindo a necessidade de retrocessos em muitos casos.
+
+### 5. Análise de conectividade com BFS
+
+A aplicação também utiliza uma busca em largura (*Breadth-First Search — BFS*) para analisar a conectividade entre as casas não visitadas.
+
+Essa análise ajuda a identificar regiões que ficaram inacessíveis a partir da posição atual, oferecendo ao jogador informações úteis sobre possíveis problemas na rota.
+
+A análise de conectividade auxilia a avaliação da partida, mas não substitui o solucionador completo.
 
 ## 🚀 Como executar o projeto
 
@@ -118,51 +148,57 @@ O Vite exibirá no terminal o endereço local para abrir a aplicação no navega
 http://localhost:5173
 ```
 
-### 5. Gerar a versão de produção
+### 5. Verificar os tipos TypeScript
+
+```bash
+npx tsc --noEmit
+```
+
+### 6. Gerar a versão de produção
 
 ```bash
 npm run build
 ```
 
-Esse comando gera a versão otimizada da aplicação para distribuição.
+Esse comando gera a versão otimizada da aplicação para distribuição no diretório `dist`.
 
 ## 🎮 Como jogar
 
-1. Escolha uma casa do tabuleiro para iniciar o desafio.
-2. Observe as casas destacadas como movimentos válidos.
-3. Selecione uma das casas permitidas para movimentar o cavalo.
-4. Acompanhe as casas visitadas e os indicadores de progresso.
-5. Utilize a opção de desfazer caso queira explorar outra rota.
-6. Procure visitar todas as 64 casas sem repetir nenhuma.
-7. Reinicie a partida para tentar uma nova sequência de movimentos.
+1. Escolha o tamanho do tabuleiro.
+2. Selecione uma casa para iniciar o desafio.
+3. Observe as casas destacadas como movimentos válidos.
+4. Escolha uma casa permitida para movimentar o cavalo.
+5. Acompanhe o progresso e evite repetir casas.
+6. Utilize as sugestões de movimentos para auxiliar suas decisões.
+7. Se necessário, desfaça uma jogada e explore outra rota.
+8. Experimente o solucionador automático e ajuste sua velocidade.
+9. Procure visitar todas as casas do tabuleiro sem repetir nenhuma.
 
-**Dica:** planejar os próximos movimentos é importante. Uma jogada válida no momento pode limitar as possibilidades disponíveis mais adiante.
+Para conhecer os controles e as regras, utilize o botão **Como jogar** disponível na interface.
 
 ## 🗺️ Próximas melhorias
 
-- [ ] Implementar um algoritmo capaz de encontrar uma solução completa para o Passeio do Cavalo.
-- [ ] Adicionar um modo de resolução automática.
-- [ ] Criar níveis de dificuldade e desafios personalizados.
-- [ ] Desenvolver estatísticas de desempenho e histórico de partidas.
-- [ ] Aprimorar a experiência em dispositivos móveis (responsividade).
-- [ ] Ampliar os testes automatizados da lógica de movimentação.
-- [ ] **Adicionar um botão de ajuda (`?`)** com as regras do jogo e uma legenda explicando as cores, os ícones e os indicadores da interface.
-- [ ] **Realizar o deploy da aplicação na web**, disponibilizando uma versão pública e acessível pelo navegador.
-
+- [ ] Publicar uma versão online para acesso direto pelo navegador.
+- [ ] Ampliar os testes automatizados das regras de movimentação e do solucionador.
+- [ ] Aprimorar a experiência em dispositivos móveis e diferentes resoluções.
+- [ ] Adicionar estatísticas de desempenho e histórico de partidas.
+- [ ] Explorar novos desafios e variações do problema do Passeio do Cavalo.
 
 ## 📚 Aprendizados
 
-O desenvolvimento deste projeto permite explorar a relação entre lógica de programação e experiência do usuário, trabalhando com regras, estados, validações e feedback visual em tempo real.
+O desenvolvimento deste projeto explora a relação entre algoritmos e experiência do usuário, trabalhando com regras, validações, estados e feedback visual em tempo real.
 
-Também reforça a importância de antecipar consequências: no Passeio do Cavalo, uma movimentação pode ser válida individualmente e, ainda assim, comprometer a conclusão do desafio.
+A implementação do solucionador permite aplicar conceitos de **backtracking, heurísticas de busca e teoria dos grafos** em um problema prático, enquanto a interface demonstra como apresentar esses conceitos de forma interativa.
 
-O projeto faz parte de uma iniciativa contínua de desenvolvimento de aplicações práticas para consolidar conhecimentos técnicos e construir um portfólio de software.
+O projeto também reforça a importância de considerar as consequências de cada decisão: no Passeio do Cavalo, uma jogada pode ser válida individualmente e, ainda assim, comprometer a conclusão do percurso.
+
+O Knight's Tour faz parte de uma iniciativa contínua de desenvolvimento de aplicações práticas para consolidar conhecimentos técnicos e construir um portfólio de software.
 
 ## 👨‍💻 Autor
 
 **Ricardo Spicka**
 
-Desenvolvedor em constante evolução, com interesse em lógica de programação, desenvolvimento de aplicações, resolução de problemas e construção de soluções tecnológicas.
+Desenvolvedor em constante evolução, com interesse em lógica de programação, desenvolvimento de aplicações, algoritmos e construção de soluções tecnológicas.
 
 <p align="center">
   <a href="https://github.com/RicardoSpicka">GitHub</a>
