@@ -1,5 +1,5 @@
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { solveKnightTour } from './solver'
 import type { Position } from './solver'
 import './App.css'
@@ -116,8 +116,6 @@ function App() {
 
   const current = history[history.length - 1]
   const visited = history
-  const timerStartedAt = useRef<number | null>(null)
-  const accumulatedTime = useRef(0)
 
   const validMoves = current
     ? getValidMoves(current, visited, boardSize)
@@ -134,66 +132,25 @@ function App() {
 
   const casasNaoAlcancadas = unreachableKeys.size
   const completed = history.length === totalSquares
-
   const resolving =
     solutionPath !== null &&
     animationIndex < solutionPath.length
 
-  const stuck =
-    Boolean(current) &&
-    validMoves.length === 0 &&
-    !completed
-
+  useEffect(() => {
+    if (completed) setShowCompletionModal(true)
+  }, [completed])
 
   // Conta o tempo apenas enquanto a partida está ativa.
   // A contagem pausa junto com a resolução automática pausada.
   useEffect(() => {
-  if (
-    history.length === 0 ||
-    completed ||
-    (resolving && !isPlaying)
-  ) {
-    return
-  }
+    if (history.length === 0 || completed || (resolving && !isPlaying)) return
 
-  if (timerStartedAt.current === null) {
-    timerStartedAt.current = Date.now()
-  }
+    const interval = window.setInterval(() => {
+      setElapsedSeconds((seconds) => seconds + 1)
+    }, 1000)
 
-  const updateTimer = () => {
-    const startedAt = timerStartedAt.current
-
-    if (startedAt === null) return
-
-    const elapsed =
-      accumulatedTime.current + (Date.now() - startedAt)
-
-    setElapsedSeconds(Math.floor(elapsed / 1000))
-  }
-
-  updateTimer()
-
-  const interval = window.setInterval(updateTimer, 200)
-
-  return () => {
-    window.clearInterval(interval)
-
-    if (timerStartedAt.current !== null) {
-      accumulatedTime.current +=
-        Date.now() - timerStartedAt.current
-
-      timerStartedAt.current = null
-    }
-  }
-}, [history.length, completed, resolving, isPlaying])
-  
-
-  
-  
-  
-
-  
-  
+    return () => window.clearInterval(interval)
+  }, [history.length, completed, resolving, isPlaying])
 
   function formatTime(totalSeconds: number): string {
     const minutes = Math.floor(totalSeconds / 60)
@@ -208,7 +165,14 @@ function App() {
     return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
   }
 
+
+  const stuck =
+    Boolean(current) &&
+    validMoves.length === 0 &&
+    !completed
+
   const [showRules, setShowRules] = useState(false)
+  const [showCompletionModal, setShowCompletionModal] = useState(false)
 
   // Executa a solução um movimento por vez.
   useEffect(() => {
@@ -247,24 +211,14 @@ function App() {
   }, [showRules])
 
   function restart() {
+    setShowCompletionModal(false)
     setHistory([])
     setRetrocessos(0)
     setElapsedSeconds(0)
-    
-    accumulatedTime.current = 0
-    timerStartedAt.current = null
-    
     setIsPlaying(false)
     setSolutionPath(null)
     setAnimationIndex(0)
   }
-  
-  
-  
-  
-  
-  
-  
 
   function changeBoardSize(value: string) {
     const nextSize = Number(value)
@@ -474,17 +428,14 @@ function App() {
         </div>
 
         <aside className="sidebar">
-
           <div className="status-card">
-            <div className="status-card-header">
-              <span className="panel-label">SUA JORNADA</span>
-                    
-              <div className="timer" aria-label={`Tempo de jogo: ${formatTime(elapsedSeconds)}`}>
-                <span className="timer-icon" aria-hidden="true">◷</span>
-                <span>{formatTime(elapsedSeconds)}</span>
-              </div>
+            <span className="panel-label">SUA JORNADA</span>
+
+            <div className="timer-row" aria-live="off">
+              <span className="timer-label">Tempo de jogo</span>
+              <strong className="timer-value">{formatTime(elapsedSeconds)}</strong>
             </div>
-                    
+
             <div className="progress-number">
               {Math.round((history.length / totalSquares) * 100)}
               <small>%</small>
@@ -772,6 +723,72 @@ function App() {
         </button>
       </footer>
     </section>
+        </div>
+      )}
+
+      {showCompletionModal && completed && (
+        <div
+          className="completion-overlay"
+          role="presentation"
+          onClick={() => setShowCompletionModal(false)}
+        >
+          <section
+            className="completion-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="completion-title"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="completion-close"
+              onClick={() => setShowCompletionModal(false)}
+              aria-label="Fechar resultado"
+            >
+              ×
+            </button>
+
+            <div className="completion-emblem" aria-hidden="true">♞</div>
+            <p className="completion-kicker">DESAFIO CONCLUÍDO</p>
+            <h2 id="completion-title">Parabéns!</h2>
+            <p className="completion-description">
+              Você percorreu todas as casas sem repetir nenhuma. Uma jornada
+              de foco, estratégia e persistência!
+            </p>
+
+            <div className="completion-stats">
+              <div className="completion-stat completion-stat-featured">
+                <span>CASAS VISITADAS</span>
+                <strong>{history.length}<small> / {totalSquares}</small></strong>
+              </div>
+              <div className="completion-stat">
+                <span>TEMPO TOTAL</span>
+                <strong>{formatTime(elapsedSeconds)}</strong>
+              </div>
+              <div className="completion-stat">
+                <span>TABULEIRO</span>
+                <strong>{boardSize} × {boardSize}</strong>
+              </div>
+              <div className="completion-stat">
+                <span>JOGADAS DESFEITAS</span>
+                <strong>{retrocessos}</strong>
+              </div>
+            </div>
+
+            <div className="completion-actions">
+              <button type="button" className="primary-button" onClick={restart}>
+                ↻ &nbsp; Jogar novamente
+              </button>
+              <button
+                type="button"
+                className="secondary-button"
+                onClick={() => setShowCompletionModal(false)}
+              >
+                Ver tabuleiro concluído
+              </button>
+            </div>
+            <p className="completion-signature">KNIGHT'S TOUR · PUZZLE 01</p>
+          </section>
         </div>
       )}
 
