@@ -1,22 +1,124 @@
 /* KNIGHT'S TOUR — CSS consolidado: responsividade, temas e congratulações */
-:root{color-scheme:dark;font-synthesis:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;background:#101411}
+
+/* Fundo global acompanha a paleta selecionada; página pode crescer e rolar. */
+:root {
+  color-scheme: dark;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--page-bg, #0c100e);
+}
+html, body {
+  min-width: 320px;
+  min-height: 100%;
+  height: auto;
+  margin: 0;
+  overflow-x: clip;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  background: var(--page-bg, #0c100e);
+}
+#root {
+  width: 100%;
+  min-height: 100dvh;
+  height: auto;
+  overflow: visible;
+  background: transparent;
+}
+
 *,*::before,*::after{box-sizing:border-box}
-html{min-width:320px;min-height:100%;background:#101411;scroll-behavior:smooth}
-body{min-width:320px;min-height:100vh;margin:0;background:#101411}
 button{font:inherit}
-#root{width:100%;min-height:100vh;min-height:100dvh;background:#101411}
 .app{
  --bg:#101411;--panel:#191e19;--border:#303830;--text:#f0f1e9;--muted:#9ba598;--accent:#b8f36b;
  display:flex;flex-direction:column;width:min(100%,1180px);min-height:100vh;min-height:100dvh;margin-inline:auto;
  padding:18px 28px max(14px,env(safe-area-inset-bottom));color:var(--text);background:var(--bg);transition:background-color 180ms ease,color 180ms ease
 }
-.app[data-theme="verde"]{--accent:#b8f36b;--bg:#101411;--panel:#191e19;--border:#303830;--text:#f0f1e9;--muted:#9ba598}
-.app[data-theme="roxo"]{--accent:#d19aff;--bg:#120e18;--panel:#1d1625;--border:#3b2b49;--text:#f5edf9;--muted:#b7a7c2}
-.app[data-theme="laranja"]{--accent:#ffb454;--bg:#19110a;--panel:#24190f;--border:#4b3420;--text:#fff2e2;--muted:#c5ad96}
-.app[data-theme="azul-claro"]{--accent:#56b4f5;--bg:#0b141d;--panel:#121f2b;--border:#294256;--text:#eaf5ff;--muted:#a1b8ca}
-.app[data-theme="grafite"]{--accent:#45e0d0;--bg:#101516;--panel:#1a2223;--border:#334344;--text:#edf7f6;--muted:#a3b8b6}
-.app[data-theme="areia"]{--accent:#d7b78a;--bg:#19150f;--panel:#252016;--border:#4b4030;--text:#f8f0e4;--muted:#c0b19b}
-.app[data-theme="rosa"]{--accent:#f08ab5;--bg:#190f16;--panel:#251721;--border:#4b2b3e;--text:#fff0f7;--muted:#c6a7b8}
+
+
+
+
+
+
+
+
+/* =========================================================
+   PALETAS COMPARTILHADAS COM APOGUE AS LUZES / PUZZLELAB
+   IDs mantidos para compatibilidade com App.tsx.
+   ========================================================= */
+.app[data-theme="verde"] {
+  --accent: #b8f36b;
+  --bg: #0c100e;
+  --panel: #141a16;
+  --border: #303830;
+  --text: #f0f1e9;
+  --muted: #9ba598;
+  --board-light: #d9dfc9;
+  --board-dark: #78896e;
+}
+.app[data-theme="roxo"] {
+  --accent: #d19aff;
+  --bg: #130d1b;
+  --panel: #21162e;
+  --border: #3b294e;
+  --text: #f5effa;
+  --muted: #b8a6c9;
+  --board-light: #e5d9ef;
+  --board-dark: #7c688e;
+}
+.app[data-theme="laranja"] {
+  --accent: #ffb454;
+  --bg: #191109;
+  --panel: #291d11;
+  --border: #4b3420;
+  --text: #fff5e8;
+  --muted: #c9b39a;
+  --board-light: #f3dfc4;
+  --board-dark: #9b7954;
+}
+.app[data-theme="azul-claro"] {
+  --accent: #2479b8;
+  --bg: #eaf4fb;
+  --panel: #ffffff;
+  --border: #c8deee;
+  --text: #19384c;
+  --muted: #557083;
+  --board-light: #f8fcff;
+  --board-dark: #b8d3e7;
+  color-scheme: light;
+}
+.app[data-theme="grafite"] {
+  --accent: #45e0d0;
+  --bg: #11171b;
+  --panel: #1b252b;
+  --border: #34464d;
+  --text: #edfafa;
+  --muted: #a8bbc0;
+  --board-light: #d2dfdf;
+  --board-dark: #53686d;
+}
+.app[data-theme="areia"] {
+  --accent: #8a6238;
+  --bg: #f4eee3;
+  --panel: #fffaf1;
+  --border: #dfd1bb;
+  --text: #3d3023;
+  --muted: #786957;
+  --board-light: #fffaf1;
+  --board-dark: #c6b59a;
+  color-scheme: light;
+}
+.app[data-theme="rosa"] {
+  --accent: #f08ab5;
+  --bg: #1d1018;
+  --panel: #2b1823;
+  --border: #4b2b3e;
+  --text: #fff0f7;
+  --muted: #c6a7b8;
+  --board-light: #f2d9e5;
+  --board-dark: #92677f;
+}
+
 .app .brand-icon{background:var(--accent);color:var(--bg)}
 .app .eyebrow,.app .move-count,.app .progress-number,.app .message-icon,.app .footer-links a{color:var(--accent)}
 .app .primary-button{background:var(--accent);border-color:var(--accent);color:var(--bg)}
@@ -54,8 +156,8 @@ button{font:inherit}
 .move-count{color:var(--accent);font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
 .board{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));grid-template-rows:repeat(8,minmax(0,1fr));width:100%;aspect-ratio:1;overflow:hidden;border:3px solid #303a2e;border-radius:5px}
 .square{position:relative;display:flex;align-items:center;justify-content:center;width:100%;height:100%;min-width:0;min-height:0;margin:0;padding:0;overflow:hidden;border:0;border-radius:0;line-height:1;cursor:pointer;transition:filter 120ms ease,box-shadow 120ms ease}
-.square.light{background:#d9dfc9;color:#293227}
-.square.dark{background:#78896e;color:#f0f3e7}
+.square.light{background:var(--board-light,#d9dfc9);color:#293227}
+.square.dark{background:var(--board-dark,#78896e);color:var(--text)}
 .square:disabled{cursor:default}
 .square:not(:disabled):hover{filter:brightness(1.12)}
 .square.current{z-index:1;background:var(--accent);color:#182014;box-shadow:inset 0 0 0 3px #f4ffd9;transform:none}
@@ -610,59 +712,286 @@ button{font:inherit}
   }
 }
 
-/* Faz o fundo de toda a janela acompanhar o tema selecionado */
-html,
-body,
-#root {
-  background: #101411;
+
+/* Cabeçalho alinhado ao padrão do PuzzleLab: marca à esquerda, tema ao centro e identificação à direita. */
+.topbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+  min-height: 46px;
+  padding: 0 0 8px;
+  margin-bottom: 0;
+  border-bottom: 1px solid var(--border);
 }
 
-html:has(.app[data-theme="verde"]),
-body:has(.app[data-theme="verde"]),
-html:has(.app[data-theme="roxo"]),
-body:has(.app[data-theme="roxo"]),
-html:has(.app[data-theme="laranja"]),
-body:has(.app[data-theme="laranja"]),
-html:has(.app[data-theme="azul-claro"]),
-body:has(.app[data-theme="azul-claro"]),
-html:has(.app[data-theme="grafite"]),
-body:has(.app[data-theme="grafite"]),
-html:has(.app[data-theme="areia"]),
-body:has(.app[data-theme="areia"]),
-html:has(.app[data-theme="rosa"]),
-body:has(.app[data-theme="rosa"]) {
-  background: var(--page-theme-bg, #101411);
+.topbar .brand {
+  justify-self: start;
+  min-width: 0;
 }
 
-/* Cor de fundo externa para cada tema */
-body:has(.app[data-theme="verde"]) {
-  background: #101411;
+.header-theme {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 4px 9px;
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, var(--border));
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--panel) 85%, var(--bg));
 }
 
-body:has(.app[data-theme="roxo"]) {
-  background: #120e18;
+.header-dev-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 23px;
+  padding: 2px 7px;
+  border: 1px solid var(--accent);
+  border-radius: 5px;
+  color: var(--accent);
+  font-size: 10px;
+  letter-spacing: 0.4px;
 }
 
-body:has(.app[data-theme="laranja"]) {
-  background: #19110a;
-}
-
-body:has(.app[data-theme="azul-claro"]) {
-  background: #0b141d;
-}
-
-body:has(.app[data-theme="grafite"]) {
-  background: #101516;
-}
-
-body:has(.app[data-theme="areia"]) {
-  background: #19150f;
-}
-
-body:has(.app[data-theme="rosa"]) {
-  background: #190f16;
-}
-
-#root {
+.header-theme .theme-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 28px;
+  padding: 2px 3px;
+  border: 0;
   background: transparent;
+  font-size: 12px;
 }
+
+.header-theme .theme-swatch-current {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  flex: 0 0 11px;
+  border-radius: 50%;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  min-width: 0;
+}
+
+.header-right .version {
+  white-space: nowrap;
+  font-size: 11px;
+  letter-spacing: 1.1px;
+}
+
+.header-right .rules-button {
+  min-height: 30px;
+  padding: 4px 8px;
+  white-space: nowrap;
+  font-size: 12px;
+}
+
+@media (max-width: 700px) {
+  .topbar {
+    grid-template-columns: minmax(0, 1fr) auto;
+    row-gap: 8px;
+  }
+
+  .header-theme {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-self: center;
+  }
+
+  .header-right {
+    grid-column: 2;
+    grid-row: 1;
+    gap: 7px;
+  }
+
+  .header-right .version {
+    display: none;
+  }
+
+  .header-right .rules-button {
+    font-size: 11px;
+    padding: 4px 6px;
+  }
+
+  .brand {
+    font-size: 14px;
+    letter-spacing: 1px;
+  }
+
+  .brand-icon {
+    width: 30px;
+    height: 30px;
+    flex-basis: 30px;
+    font-size: 22px;
+  }
+}
+
+
+/* O fundo fora de .app também acompanha o tema atual. */
+html:has(.app[data-theme="verde"]), body:has(.app[data-theme="verde"]) { --page-bg: #0c100e; }
+html:has(.app[data-theme="roxo"]), body:has(.app[data-theme="roxo"]) { --page-bg: #130d1b; }
+html:has(.app[data-theme="laranja"]), body:has(.app[data-theme="laranja"]) { --page-bg: #191109; }
+html:has(.app[data-theme="azul-claro"]), body:has(.app[data-theme="azul-claro"]) { --page-bg: #eaf4fb; }
+html:has(.app[data-theme="grafite"]), body:has(.app[data-theme="grafite"]) { --page-bg: #11171b; }
+html:has(.app[data-theme="areia"]), body:has(.app[data-theme="areia"]) { --page-bg: #f4eee3; }
+html:has(.app[data-theme="rosa"]), body:has(.app[data-theme="rosa"]) { --page-bg: #1d1018; }
+
+/* Revisão de layout: rodapé no fluxo normal e altura de página sem corte. */
+.app {
+  height: auto;
+  min-height: 100dvh;
+  overflow: visible;
+  flex: 0 0 auto;
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+}
+.footer {
+  position: static;
+  flex: 0 0 auto;
+  margin-top: auto;
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+}
+
+/* Em desktop, reservar espaço vertical para cabeçalho, introdução, painéis e rodapé. */
+@media (min-width: 901px) {
+  .app {
+    width: min(100%, 1440px);
+    padding-inline: clamp(16px, 2.5vw, 36px);
+  }
+
+  .game-layout {
+    min-width: 0;
+    align-items: start;
+  }
+
+  .board-panel {
+    min-width: 0;
+  }
+
+  .board {
+    width: 100%;
+    max-width: min(620px, calc(100dvh - 425px));
+    margin-inline: auto;
+  }
+
+  .board-coordinates {
+    width: min(100%, min(620px, calc(100dvh - 425px)));
+    margin-inline: auto;
+  }
+
+  .footer {
+    margin-top: auto;
+    padding-top: 8px;
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+  }
+}
+
+/* Notebook / janela de menor altura: compacta sem cortar o rodapé. */
+@media (min-width: 901px) and (max-height: 850px) {
+  .app {
+    padding-top: 8px;
+    padding-bottom: 6px;
+  }
+
+  .topbar {
+    padding-bottom: 7px;
+  }
+
+  .hero {
+    padding-top: 5px;
+    padding-bottom: 8px;
+  }
+
+  .hero h1 {
+    margin: 5px 0;
+    font-size: clamp(28px, 3vw, 40px);
+  }
+
+  .subtitle {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .game-layout {
+    gap: 12px;
+  }
+
+  .board-panel {
+    padding: 10px;
+  }
+
+  .board {
+    max-width: min(600px, calc(100dvh - 400px));
+  }
+
+  .board-coordinates {
+    width: min(100%, min(600px, calc(100dvh - 400px)));
+  }
+
+  .footer {
+    padding-top: 6px;
+    padding-bottom: 4px;
+    font-size: 11px;
+  }
+}
+
+@media (min-width: 901px) and (max-height: 650px) {
+  .subtitle {
+    display: none;
+  }
+
+  .hero {
+    padding-top: 3px;
+    padding-bottom: 5px;
+  }
+
+  .hero h1 {
+    font-size: 27px;
+  }
+
+  .board {
+    max-width: min(540px, calc(100dvh - 300px));
+  }
+
+  .board-coordinates {
+    width: min(100%, min(540px, calc(100dvh - 300px)));
+  }
+
+  .status-card,
+  .action-card,
+  .message-card {
+    padding: 8px;
+  }
+
+  .sidebar {
+    gap: 7px;
+  }
+
+  .footer {
+    padding-top: 4px;
+    font-size: 10px;
+  }
+}
+
+/* Tema claro: controles, texto e tabuleiro mantêm contraste. */
+.app[data-theme="azul-claro"],
+.app[data-theme="areia"] {
+  color-scheme: light;
+}
+.app[data-theme="azul-claro"] .square.current,
+.app[data-theme="areia"] .square.current {
+  color: #fff;
+}
+.app[data-theme="azul-claro"] .primary-button,
+.app[data-theme="areia"] .primary-button {
+  color: #fff;
+}
+
+

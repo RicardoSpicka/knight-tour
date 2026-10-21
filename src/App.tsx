@@ -100,11 +100,11 @@ function getUnreachableSquares(
 
 const THEMES = [
   { id: 'verde', name: 'Verde', color: '#b8f36b' },
-  { id: 'roxo', name: 'Roxo', color: '#d19aff' },
-  { id: 'laranja', name: 'Laranja', color: '#ffb454' },
-  { id: 'azul-claro', name: 'Azul-claro', color: '#56b4f5' },
+  { id: 'roxo', name: 'Roxo Arcade', color: '#d19aff' },
+  { id: 'laranja', name: 'Laranja Solar', color: '#ffb454' },
+  { id: 'azul-claro', name: 'Azul Gelo', color: '#2479b8' },
   { id: 'grafite', name: 'Grafite', color: '#45e0d0' },
-  { id: 'areia', name: 'Areia', color: '#d7b78a' },
+  { id: 'areia', name: 'Areia', color: '#8a6238' },
   { id: 'rosa', name: 'Rosa', color: '#f08ab5' },
 ]
 
@@ -311,19 +311,11 @@ function App() {
       <header className="topbar">
         <div className="brand">
           <span className="brand-icon">♞</span>
-          <span>KNIGHT'S TOUR</span>
+          <span>PUZZLELAB</span>
         </div>
 
-        <div className="topbar-actions">
-          <button
-            type="button"
-            className="rules-button"
-            onClick={() => setShowRules(true)}
-          >
-            <span aria-hidden="true">ⓘ</span>
-            Como jogar
-          </button>
-
+        <div className="header-theme">
+          <span className="header-dev-badge">DEV</span>
           <div className="theme-picker">
             <button
               type="button"
@@ -332,12 +324,12 @@ function App() {
               aria-haspopup="true"
               onClick={() => setShowThemeMenu((open) => !open)}
             >
+              Tema
               <span
                 className="theme-swatch-current"
                 style={{ backgroundColor: THEMES.find((item) => item.id === theme)?.color }}
                 aria-hidden="true"
               />
-              Tema
               <span aria-hidden="true">⌄</span>
             </button>
             {showThemeMenu && (
@@ -362,19 +354,28 @@ function App() {
               </div>
             )}
           </div>
+        </div>
 
-          <span className="version">PUZZLE · 01</span>
+        <div className="header-right">
+          <button
+            type="button"
+            className="rules-button"
+            onClick={() => setShowRules(true)}
+          >
+            <span aria-hidden="true">ⓘ</span>
+            Como jogar
+          </button>
+          <span className="version">DESAFIO DE LÓGICA</span>
         </div>
       </header>
 
       <section className="hero">
-        <p className="eyebrow">DESAFIO DE LÓGICA</p>
+        <p className="eyebrow">DESAFIE SUA MENTE</p>
 
-        <h1>Uma jogada de cada vez.</h1>
+        <h1>Knight's Tour.</h1>
 
         <p className="subtitle">
-          Visite todas as casas do tabuleiro usando apenas
-          os movimentos do cavalo. Sem repetir nenhuma casa.
+          Uma jogada de cada vez. Visite todas as casas do tabuleiro usando os movimentos do cavalo, sem repetir nenhuma casa.
         </p>
       </section>
 
@@ -873,7 +874,7 @@ function App() {
             LinkedIn
           </a>
           <span aria-hidden="true">·</span>
-          <a href="https://github.com/RicardoSpicka" target="_blank" rel="noopener noreferrer">
+          <a href="https://apague-as-luzes.vercel.app/" target="_blank" rel="noopener noreferrer">
             Apague as Luzes
           </a>
         </div>
