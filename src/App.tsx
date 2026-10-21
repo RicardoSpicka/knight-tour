@@ -5,7 +5,7 @@ import type { Position } from './solver'
 import './App.css'
 
 
-const BOARD_SIZES = [5, 6, 7, 8]
+const BOARD_SIZES = [5, 6, 7, 8, 9, 10]
 
 const MOVES: Position[] = [
   { row: -2, col: -1 },
@@ -103,6 +103,7 @@ function App() {
   const [boardSize, setBoardSize] = useState(8)
   const [history, setHistory] = useState<Position[]>([])
   const [retrocessos, setRetrocessos] = useState(0)
+  const [elapsedSeconds, setElapsedSeconds] = useState(0)
 
   const [solutionPath, setSolutionPath] =
     useState<Position[] | null>(null)
@@ -131,10 +132,39 @@ function App() {
 
   const casasNaoAlcancadas = unreachableKeys.size
   const completed = history.length === totalSquares
-
   const resolving =
     solutionPath !== null &&
     animationIndex < solutionPath.length
+
+  useEffect(() => {
+    if (completed) setShowCompletionModal(true)
+  }, [completed])
+
+  // Conta o tempo apenas enquanto a partida está ativa.
+  // A contagem pausa junto com a resolução automática pausada.
+  useEffect(() => {
+    if (history.length === 0 || completed || (resolving && !isPlaying)) return
+
+    const interval = window.setInterval(() => {
+      setElapsedSeconds((seconds) => seconds + 1)
+    }, 1000)
+
+    return () => window.clearInterval(interval)
+  }, [history.length, completed, resolving, isPlaying])
+
+  function formatTime(totalSeconds: number): string {
+    const minutes = Math.floor(totalSeconds / 60)
+    const seconds = totalSeconds % 60
+    const hours = Math.floor(minutes / 60)
+    const remainingMinutes = minutes % 60
+
+    if (hours > 0) {
+      return `${String(hours).padStart(2, '0')}:${String(remainingMinutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
+    }
+
+    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
+  }
+
 
   const stuck =
     Boolean(current) &&
@@ -142,6 +172,7 @@ function App() {
     !completed
 
   const [showRules, setShowRules] = useState(false)
+  const [showCompletionModal, setShowCompletionModal] = useState(false)
 
   // Executa a solução um movimento por vez.
   useEffect(() => {
@@ -180,8 +211,10 @@ function App() {
   }, [showRules])
 
   function restart() {
+    setShowCompletionModal(false)
     setHistory([])
     setRetrocessos(0)
+    setElapsedSeconds(0)
     setIsPlaying(false)
     setSolutionPath(null)
     setAnimationIndex(0)
@@ -397,6 +430,11 @@ function App() {
         <aside className="sidebar">
           <div className="status-card">
             <span className="panel-label">SUA JORNADA</span>
+
+            <div className="timer-row" aria-live="off">
+              <span className="timer-label">Tempo de jogo</span>
+              <strong className="timer-value">{formatTime(elapsedSeconds)}</strong>
+            </div>
 
             <div className="progress-number">
               {Math.round((history.length / totalSquares) * 100)}
@@ -644,8 +682,8 @@ function App() {
           <div>
             <h3>Escolha a dificuldade</h3>
             <p>
-              Você pode jogar em tabuleiros de 5×5, 6×6,
-              7×7 ou 8×8. Quanto maior o tabuleiro, mais casas
+              Você pode jogar em tabuleiros de 5×5, 6×6, 7×7,
+              8×8, 9×9 ou 10×10. Quanto maior o tabuleiro, mais casas
               você precisará percorrer.
             </p>
           </div>
@@ -685,6 +723,72 @@ function App() {
         </button>
       </footer>
     </section>
+        </div>
+      )}
+
+      {showCompletionModal && completed && (
+        <div
+          className="completion-overlay"
+          role="presentation"
+          onClick={() => setShowCompletionModal(false)}
+        >
+          <section
+            className="completion-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="completion-title"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              className="completion-close"
+              onClick={() => setShowCompletionModal(false)}
+              aria-label="Fechar resultado"
+            >
+              ×
+            </button>
+
+            <div className="completion-emblem" aria-hidden="true">♞</div>
+            <p className="completion-kicker">DESAFIO CONCLUÍDO</p>
+            <h2 id="completion-title">Parabéns!</h2>
+            <p className="completion-description">
+              Você percorreu todas as casas sem repetir nenhuma. Uma jornada
+              de foco, estratégia e persistência!
+            </p>
+
+            <div className="completion-stats">
+              <div className="completion-stat completion-stat-featured">
+                <span>CASAS VISITADAS</span>
+                <strong>{history.length}<small> / {totalSquares}</small></strong>
+              </div>
+              <div className="completion-stat">
+                <span>TEMPO TOTAL</span>
+                <strong>{formatTime(elapsedSeconds)}</strong>
+              </div>
+              <div className="completion-stat">
+                <span>TABULEIRO</span>
+                <strong>{boardSize} × {boardSize}</strong>
+              </div>
+              <div className="completion-stat">
+                <span>JOGADAS DESFEITAS</span>
+                <strong>{retrocessos}</strong>
+              </div>
+            </div>
+
+            <div className="completion-actions">
+              <button type="button" className="primary-button" onClick={restart}>
+                ↻ &nbsp; Jogar novamente
+              </button>
+              <button
+                type="button"
+                className="secondary-button"
+                onClick={() => setShowCompletionModal(false)}
+              >
+                Ver tabuleiro concluído
+              </button>
+            </div>
+            <p className="completion-signature">KNIGHT'S TOUR · PUZZLE 01</p>
+          </section>
         </div>
       )}
 
