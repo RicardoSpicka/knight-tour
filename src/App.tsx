@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { solveKnightTour } from './solver'
 import type { Position } from './solver'
 import './App.css'
@@ -116,6 +116,8 @@ function App() {
 
   const current = history[history.length - 1]
   const visited = history
+  const timerStartedAt = useRef<number | null>(null)
+  const accumulatedTime = useRef(0)
 
   const validMoves = current
     ? getValidMoves(current, visited, boardSize)
@@ -146,14 +148,52 @@ function App() {
   // Conta o tempo apenas enquanto a partida está ativa.
   // A contagem pausa junto com a resolução automática pausada.
   useEffect(() => {
-    if (history.length === 0 || completed || (resolving && !isPlaying)) return
+  if (
+    history.length === 0 ||
+    completed ||
+    (resolving && !isPlaying)
+  ) {
+    return
+  }
 
-    const interval = window.setInterval(() => {
-      setElapsedSeconds((seconds) => seconds + 1)
-    }, 1000)
+  if (timerStartedAt.current === null) {
+    timerStartedAt.current = Date.now()
+  }
 
-    return () => window.clearInterval(interval)
-  }, [history.length, completed, resolving, isPlaying])
+  const updateTimer = () => {
+    const startedAt = timerStartedAt.current
+
+    if (startedAt === null) return
+
+    const elapsed =
+      accumulatedTime.current + (Date.now() - startedAt)
+
+    setElapsedSeconds(Math.floor(elapsed / 1000))
+  }
+
+  updateTimer()
+
+  const interval = window.setInterval(updateTimer, 200)
+
+  return () => {
+    window.clearInterval(interval)
+
+    if (timerStartedAt.current !== null) {
+      accumulatedTime.current +=
+        Date.now() - timerStartedAt.current
+
+      timerStartedAt.current = null
+    }
+  }
+}, [history.length, completed, resolving, isPlaying])
+  
+
+  
+  
+  
+
+  
+  
 
   function formatTime(totalSeconds: number): string {
     const minutes = Math.floor(totalSeconds / 60)
@@ -210,10 +250,21 @@ function App() {
     setHistory([])
     setRetrocessos(0)
     setElapsedSeconds(0)
+    
+    accumulatedTime.current = 0
+    timerStartedAt.current = null
+    
     setIsPlaying(false)
     setSolutionPath(null)
     setAnimationIndex(0)
   }
+  
+  
+  
+  
+  
+  
+  
 
   function changeBoardSize(value: string) {
     const nextSize = Number(value)
