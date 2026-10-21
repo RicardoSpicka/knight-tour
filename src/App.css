@@ -1116,3 +1116,221 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .completion-overlay, .completion-modal { animation: none !important; }
 }
+
+/* ---------- Ajustes finais de consistência visual ---------- */
+
+.app {
+  width: min(100%, 1180px);
+  min-height: 100vh;
+  min-height: 100dvh;
+  margin-inline: auto;
+  padding-bottom: max(14px, env(safe-area-inset-bottom));
+}
+
+.topbar,
+.brand,
+.topbar-actions {
+  min-width: 0;
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.board-panel,
+.status-card,
+.action-card,
+.message-card {
+  min-width: 0;
+}
+
+.footer {
+  flex-wrap: wrap;
+  row-gap: 10px;
+  margin-top: auto;
+  padding: 18px 0 max(8px, env(safe-area-inset-bottom));
+}
+
+.footer > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.footer-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+}
+
+.completion-overlay {
+  padding: max(16px, env(safe-area-inset-top)) 16px
+    max(16px, env(safe-area-inset-bottom));
+}
+
+.completion-modal {
+  width: min(100%, 500px);
+  overscroll-behavior: contain;
+}
+
+.completion-actions {
+  grid-template-columns: 1fr;
+}
+
+@media (max-width: 900px) {
+  .app {
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+
+  .game-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .board-panel {
+    width: 100%;
+    max-width: 680px;
+    justify-self: center;
+  }
+
+  .footer {
+    margin-top: 24px;
+  }
+}
+
+@media (max-width: 560px) {
+  .topbar {
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .topbar-actions {
+    max-width: 100%;
+    margin-left: auto;
+  }
+
+  .footer {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+  }
+
+  .footer-links {
+    justify-content: center;
+    gap: clamp(16px, 6vw, 24px);
+  }
+
+  .completion-overlay {
+    place-items: start center;
+    overflow-y: auto;
+  }
+
+  .completion-modal {
+    max-height: none;
+    margin-block: auto;
+  }
+}
+
+@media (max-width: 380px) {
+  .topbar-actions {
+    width: 100%;
+    justify-content: flex-start;
+    margin-left: 0;
+  }
+
+  .completion-stats {
+    gap: 7px;
+  }
+
+  .completion-stat {
+    padding: 9px 8px;
+  }
+
+  .completion-stat strong {
+    font-size: 1.1rem;
+  }
+}
+
+
+/* =========================================================
+   PUZZLELAB THEMES — padrão compartilhado com Apague as Luzes
+   ========================================================= */
+.app[data-theme="verde"] { --accent: #b8f36b; --bg: #101411; --panel: #191e19; --border: #303830; --text: #f0f1e9; --muted: #9ba598; }
+.app[data-theme="roxo"] { --accent: #d19aff; --bg: #120e18; --panel: #1d1625; --border: #3b2b49; --text: #f5edf9; --muted: #b7a7c2; }
+.app[data-theme="laranja"] { --accent: #ffb454; --bg: #19110a; --panel: #24190f; --border: #4b3420; --text: #fff2e2; --muted: #c5ad96; }
+.app[data-theme="azul-claro"] { --accent: #56b4f5; --bg: #0b141d; --panel: #121f2b; --border: #294256; --text: #eaf5ff; --muted: #a1b8ca; }
+.app[data-theme="grafite"] { --accent: #45e0d0; --bg: #101516; --panel: #1a2223; --border: #334344; --text: #edf7f6; --muted: #a3b8b6; }
+.app[data-theme="areia"] { --accent: #d7b78a; --bg: #19150f; --panel: #252016; --border: #4b4030; --text: #f8f0e4; --muted: #c0b19b; }
+.app[data-theme="rosa"] { --accent: #f08ab5; --bg: #190f16; --panel: #251721; --border: #4b2b3e; --text: #fff0f7; --muted: #c6a7b8; }
+
+.app { transition: background-color 180ms ease, color 180ms ease; }
+.app .brand-icon { background: var(--accent); color: var(--bg); }
+.app .eyebrow, .app .move-count, .app .progress-number,
+.app .message-icon, .app .footer-links a { color: var(--accent); }
+.app .primary-button { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+.app .primary-button:hover:not(:disabled) { filter: brightness(1.08); }
+.app .square.current { background: var(--accent); color: var(--bg); }
+.app .square.hint:not(.current) { box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--accent) 90%, white); }
+.app .hint-dot { background: color-mix(in srgb, var(--accent) 85%, white); }
+.app .progress-fill { background: var(--accent); }
+.app .footer-links a:hover { color: color-mix(in srgb, var(--accent) 75%, white); }
+
+.theme-picker { position: relative; flex: 0 0 auto; }
+.theme-toggle {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  min-height: 38px; padding: 7px 11px; border: 1px solid var(--border);
+  border-radius: 9px; color: var(--text); background: var(--panel);
+  font: inherit; font-size: 13px; font-weight: 700; cursor: pointer;
+}
+.theme-toggle:hover, .theme-toggle[aria-expanded="true"] { border-color: var(--accent); }
+.theme-swatch-current, .theme-swatch { display: inline-block; width: 13px; height: 13px; flex: 0 0 13px; border-radius: 50%; box-shadow: 0 0 0 2px color-mix(in srgb, var(--text) 12%, transparent); }
+.theme-options {
+  position: absolute; z-index: 50; top: calc(100% + 8px); right: 0;
+  display: grid; gap: 4px; width: 190px; padding: 7px;
+  border: 1px solid var(--border); border-radius: 12px; background: var(--panel);
+  box-shadow: 0 16px 40px #0007;
+}
+.theme-option {
+  display: flex; align-items: center; gap: 10px; width: 100%; min-height: 36px;
+  padding: 7px 9px; border: 1px solid transparent; border-radius: 7px;
+  background: transparent; color: var(--text); text-align: left; font: inherit; font-size: 13px; cursor: pointer;
+}
+.theme-option:hover, .theme-option.active { border-color: var(--border); background: color-mix(in srgb, var(--accent) 10%, var(--panel)); }
+.theme-check { margin-left: auto; color: var(--accent); font-weight: 800; }
+
+.footer { gap: 10px; }
+.footer p { margin: 0; }
+.footer-project { color: var(--muted); }
+.footer-separator { color: var(--muted); }
+
+.completion-overlay { padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom)); }
+.completion-modal { width: min(100%, 520px); overscroll-behavior: contain; }
+.completion-emblem { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 60%, var(--border)); background: color-mix(in srgb, var(--accent) 12%, var(--panel)); }
+.completion-kicker { color: var(--accent); }
+.completion-stat-featured { border-color: color-mix(in srgb, var(--accent) 60%, var(--border)); }
+.completion-actions { grid-template-columns: 1fr; }
+
+@media (max-width: 900px) {
+  .app { min-height: 100vh; min-height: 100dvh; }
+  .game-layout { grid-template-columns: minmax(0, 1fr); }
+  .board-panel { width: 100%; max-width: 680px; justify-self: center; }
+  .footer { margin-top: 24px; }
+}
+@media (max-width: 560px) {
+  .topbar { flex-wrap: wrap; align-items: center; }
+  .topbar-actions { max-width: 100%; margin-left: auto; flex-wrap: wrap; justify-content: flex-end; }
+  .theme-toggle { min-height: 34px; padding: 6px 8px; gap: 5px; }
+  .footer { flex-direction: column; align-items: center; text-align: center; gap: 8px; }
+  .footer-links { justify-content: center; gap: 12px; }
+  .completion-overlay { place-items: start center; overflow-y: auto; }
+  .completion-modal { max-height: none; margin-block: auto; padding: 24px 18px; }
+}
+@media (max-width: 380px) {
+  .topbar-actions { width: 100%; margin-left: 0; justify-content: space-between; }
+  .version { font-size: 11px; }
+  .completion-stats { gap: 7px; }
+  .completion-stat { padding: 9px 8px; }
+  .completion-stat strong { font-size: 1.1rem; }
+}
