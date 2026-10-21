@@ -4,6 +4,7 @@ import { solveKnightTour } from './solver'
 import type { Position } from './solver'
 import './App.css'
 
+
 const BOARD_SIZES = [5, 6, 7, 8]
 
 const MOVES: Position[] = [
