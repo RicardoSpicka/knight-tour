@@ -609,3 +609,60 @@ button{font:inherit}
     padding-top: 8px;
   }
 }
+
+/* Faz o fundo de toda a janela acompanhar o tema selecionado */
+html,
+body,
+#root {
+  background: #101411;
+}
+
+html:has(.app[data-theme="verde"]),
+body:has(.app[data-theme="verde"]),
+html:has(.app[data-theme="roxo"]),
+body:has(.app[data-theme="roxo"]),
+html:has(.app[data-theme="laranja"]),
+body:has(.app[data-theme="laranja"]),
+html:has(.app[data-theme="azul-claro"]),
+body:has(.app[data-theme="azul-claro"]),
+html:has(.app[data-theme="grafite"]),
+body:has(.app[data-theme="grafite"]),
+html:has(.app[data-theme="areia"]),
+body:has(.app[data-theme="areia"]),
+html:has(.app[data-theme="rosa"]),
+body:has(.app[data-theme="rosa"]) {
+  background: var(--page-theme-bg, #101411);
+}
+
+/* Cor de fundo externa para cada tema */
+body:has(.app[data-theme="verde"]) {
+  background: #101411;
+}
+
+body:has(.app[data-theme="roxo"]) {
+  background: #120e18;
+}
+
+body:has(.app[data-theme="laranja"]) {
+  background: #19110a;
+}
+
+body:has(.app[data-theme="azul-claro"]) {
+  background: #0b141d;
+}
+
+body:has(.app[data-theme="grafite"]) {
+  background: #101516;
+}
+
+body:has(.app[data-theme="areia"]) {
+  background: #19150f;
+}
+
+body:has(.app[data-theme="rosa"]) {
+  background: #190f16;
+}
+
+#root {
+  background: transparent;
+}
