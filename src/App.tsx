@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from 'react'
 import { solveKnightTour } from './solver'
 import type { Position } from './solver'
@@ -99,6 +98,16 @@ function getUnreachableSquares(
   return unreachable
 }
 
+const THEMES = [
+  { id: 'verde', name: 'Verde', color: '#b8f36b' },
+  { id: 'roxo', name: 'Roxo', color: '#d19aff' },
+  { id: 'laranja', name: 'Laranja', color: '#ffb454' },
+  { id: 'azul-claro', name: 'Azul-claro', color: '#56b4f5' },
+  { id: 'grafite', name: 'Grafite', color: '#45e0d0' },
+  { id: 'areia', name: 'Areia', color: '#d7b78a' },
+  { id: 'rosa', name: 'Rosa', color: '#f08ab5' },
+]
+
 function App() {
   const [boardSize, setBoardSize] = useState(8)
   const [history, setHistory] = useState<Position[]>([])
@@ -111,6 +120,10 @@ function App() {
   const [isPlaying, setIsPlaying] = useState(false)
   const [speed, setSpeed] = useState(500)
   const [showHints, setShowHints] = useState(true)
+  const [theme, setTheme] = useState('verde')
+  const [showThemeMenu, setShowThemeMenu] = useState(false)
+  const [showRules, setShowRules] = useState(false)
+  const [showCompletionModal, setShowCompletionModal] = useState(false)
 
   const totalSquares = boardSize * boardSize
 
@@ -171,9 +184,6 @@ function App() {
     validMoves.length === 0 &&
     !completed
 
-  const [showRules, setShowRules] = useState(false)
-  const [showCompletionModal, setShowCompletionModal] = useState(false)
-
   // Executa a solução um movimento por vez.
   useEffect(() => {
     if (!isPlaying || !solutionPath) return
@@ -209,6 +219,16 @@ function App() {
       window.removeEventListener('keydown', handleKeyDown)
     }
   }, [showRules])
+
+
+  useEffect(() => {
+    if (!showThemeMenu) return
+    function handleThemeEscape(event: KeyboardEvent) {
+      if (event.key === 'Escape') setShowThemeMenu(false)
+    }
+    window.addEventListener('keydown', handleThemeEscape)
+    return () => window.removeEventListener('keydown', handleThemeEscape)
+  }, [showThemeMenu])
 
   function restart() {
     setShowCompletionModal(false)
@@ -287,7 +307,7 @@ function App() {
   }
 
   return (
-    <main className="app">
+    <main className="app" data-theme={theme}>
       <header className="topbar">
         <div className="brand">
           <span className="brand-icon">♞</span>
@@ -303,7 +323,46 @@ function App() {
             <span aria-hidden="true">ⓘ</span>
             Como jogar
           </button>
-          
+
+          <div className="theme-picker">
+            <button
+              type="button"
+              className="theme-toggle"
+              aria-expanded={showThemeMenu}
+              aria-haspopup="true"
+              onClick={() => setShowThemeMenu((open) => !open)}
+            >
+              <span
+                className="theme-swatch-current"
+                style={{ backgroundColor: THEMES.find((item) => item.id === theme)?.color }}
+                aria-hidden="true"
+              />
+              Tema
+              <span aria-hidden="true">⌄</span>
+            </button>
+            {showThemeMenu && (
+              <div className="theme-options" role="menu" aria-label="Escolher tema de cores">
+                {THEMES.map((item) => (
+                  <button
+                    key={item.id}
+                    type="button"
+                    role="menuitemradio"
+                    aria-checked={theme === item.id}
+                    className={`theme-option ${theme === item.id ? 'active' : ''}`}
+                    onClick={() => {
+                      setTheme(item.id)
+                      setShowThemeMenu(false)
+                    }}
+                  >
+                    <span className="theme-swatch" style={{ backgroundColor: item.color }} aria-hidden="true" />
+                    <span>{item.name}</span>
+                    {theme === item.id && <span className="theme-check" aria-hidden="true">✓</span>}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
           <span className="version">PUZZLE · 01</span>
         </div>
       </header>
@@ -793,7 +852,7 @@ function App() {
       )}
 
       <footer className="footer">
-        <span>Desenvolvido por Ricardo Spicka</span>
+        <p>Desenvolvido por <strong>Ricardo Spicka</strong> © 2026</p>
 
         <div className="footer-links">
           <a
@@ -802,16 +861,20 @@ function App() {
             rel="noopener noreferrer"
             aria-label="GitHub de Ricardo Spicka"
           >
-            GitHub ↗
+            GitHub
           </a>
-
+          <span aria-hidden="true">·</span>
           <a
             href="https://www.linkedin.com/in/ricardo-spicka-b79049160"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="LinkedIn de Ricardo Spicka"
           >
-            LinkedIn ↗
+            LinkedIn
+          </a>
+          <span aria-hidden="true">·</span>
+          <a href="https://github.com/RicardoSpicka" target="_blank" rel="noopener noreferrer">
+            Apague as Luzes
           </a>
         </div>
       </footer>
