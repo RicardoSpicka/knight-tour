@@ -5,7 +5,7 @@ import type { Position } from './solver'
 import './App.css'
 
 
-const BOARD_SIZES = [5, 6, 7, 8]
+const BOARD_SIZES = [5, 6, 7, 8, 9, 10]
 
 const MOVES: Position[] = [
   { row: -2, col: -1 },
@@ -103,6 +103,7 @@ function App() {
   const [boardSize, setBoardSize] = useState(8)
   const [history, setHistory] = useState<Position[]>([])
   const [retrocessos, setRetrocessos] = useState(0)
+  const [elapsedSeconds, setElapsedSeconds] = useState(0)
 
   const [solutionPath, setSolutionPath] =
     useState<Position[] | null>(null)
@@ -140,6 +141,32 @@ function App() {
     Boolean(current) &&
     validMoves.length === 0 &&
     !completed
+
+
+  // Conta o tempo apenas enquanto a partida está ativa.
+  // A contagem pausa junto com a resolução automática pausada.
+  useEffect(() => {
+    if (history.length === 0 || completed || (resolving && !isPlaying)) return
+
+    const interval = window.setInterval(() => {
+      setElapsedSeconds((seconds) => seconds + 1)
+    }, 1000)
+
+    return () => window.clearInterval(interval)
+  }, [history.length, completed, resolving, isPlaying])
+
+  function formatTime(totalSeconds: number): string {
+    const minutes = Math.floor(totalSeconds / 60)
+    const seconds = totalSeconds % 60
+    const hours = Math.floor(minutes / 60)
+    const remainingMinutes = minutes % 60
+
+    if (hours > 0) {
+      return `${String(hours).padStart(2, '0')}:${String(remainingMinutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
+    }
+
+    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`
+  }
 
   const [showRules, setShowRules] = useState(false)
 
@@ -182,6 +209,7 @@ function App() {
   function restart() {
     setHistory([])
     setRetrocessos(0)
+    setElapsedSeconds(0)
     setIsPlaying(false)
     setSolutionPath(null)
     setAnimationIndex(0)
@@ -395,9 +423,17 @@ function App() {
         </div>
 
         <aside className="sidebar">
-          <div className="status-card">
-            <span className="panel-label">SUA JORNADA</span>
 
+          <div className="status-card">
+            <div className="status-card-header">
+              <span className="panel-label">SUA JORNADA</span>
+                    
+              <div className="timer" aria-label={`Tempo de jogo: ${formatTime(elapsedSeconds)}`}>
+                <span className="timer-icon" aria-hidden="true">◷</span>
+                <span>{formatTime(elapsedSeconds)}</span>
+              </div>
+            </div>
+                    
             <div className="progress-number">
               {Math.round((history.length / totalSquares) * 100)}
               <small>%</small>
@@ -644,8 +680,8 @@ function App() {
           <div>
             <h3>Escolha a dificuldade</h3>
             <p>
-              Você pode jogar em tabuleiros de 5×5, 6×6,
-              7×7 ou 8×8. Quanto maior o tabuleiro, mais casas
+              Você pode jogar em tabuleiros de 5×5, 6×6, 7×7,
+              8×8, 9×9 ou 10×10. Quanto maior o tabuleiro, mais casas
               você precisará percorrer.
             </p>
           </div>

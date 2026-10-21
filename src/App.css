@@ -536,6 +536,28 @@
   color: #f0bd69;
 }
 
+.status-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.timer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--accent);
+  font-size: 18px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.timer-icon {
+  font-size: 20px;
+  line-height: 1;
+}
 /* ---------- Rodapé ---------- */
 
 .footer {
@@ -1162,5 +1184,23 @@
     margin-top: 8px;
     padding-top: 6px;
     font-size: 12px;
+  }
+}
+
+@media (max-width: 900px) {
+  .game-layout {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .board-panel {
+    order: 1;
+    width: 100%;
+  }
+
+  .sidebar {
+    order: 2;
+    width: 100%;
+    grid-template-columns: minmax(0, 1fr);
   }
 }
