@@ -883,32 +883,54 @@ function App() {
       )}
 
       <footer className="footer">
-        <p>Desenvolvido por <strong>Ricardo Spicka</strong> © 2026</p>
+        <div className="footer-author">
+          <p>
+            Desenvolvido por <strong>Ricardo Spicka</strong> © 2026
+          </p>
 
-        <div className="footer-links">
-          <a
-            href="https://github.com/RicardoSpicka"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="GitHub de Ricardo Spicka"
-          >
-            GitHub
-          </a>
-          <span aria-hidden="true">·</span>
-          <a
-            href="https://www.linkedin.com/in/ricardo-spicka-b79049160"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="LinkedIn de Ricardo Spicka"
-          >
-            LinkedIn
-          </a>
-          <span aria-hidden="true">·</span>
-          <a href="https://apague-as-luzes.vercel.app/" target="_blank" rel="noopener noreferrer">
-            Apague as Luzes
-          </a>
+          <div className="footer-social">
+            <a
+              href="https://github.com/RicardoSpicka"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              GitHub
+            </a>
+            <span>·</span>
+            <a
+              href="https://www.linkedin.com/in/ricardo-spicka-b79049160"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              LinkedIn
+            </a>
+          </div>
+        </div>
+
+        <div className="footer-games">
+          <span className="footer-games-title">MAIS JOGOS DO PUZZLELAB</span>
+
+          <div style={{display: 'flex', flexDirection: "column"}}>
+              <a
+                href="https://maze-challenge.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Encontre a Saída
+              </a>
+
+              <a
+                href="apague-as-luzes.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Apague as Luzes
+              </a>
+
+           </div>
         </div>
       </footer>
+
     </main>
   )
 }
