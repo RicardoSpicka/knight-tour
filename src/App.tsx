@@ -150,6 +150,18 @@ function App() {
     solutionPath !== null &&
     animationIndex < solutionPath.length
 
+  const [totalAcessos, setTotalAcessos] = useState<number | null>(null)
+
+  useEffect(() => {
+    fetch('https://abacus.jasoncameron.dev/hit/knight-tour-beta.vercel.app/visitas')
+      .then((response) => {
+        if (!response.ok) throw new Error('Erro ao contar acesso')
+        return response.json()
+      })
+      .then((data) => setTotalAcessos(data.value))
+      .catch((error) => console.error('Contador de acessos:', error))
+  }, [])
+  
   // Conta o tempo apenas enquanto a partida está ativa.
   // A contagem pausa junto com a resolução automática pausada.
   // Atualiza o visor com base no tempo real decorrido.
@@ -884,6 +896,13 @@ function App() {
 
       <footer className="footer">
         <p>Desenvolvido por <strong>Ricardo Spicka</strong> © 2026</p>
+
+        <p className="footer-visits">
+          <span aria-hidden="true">👁 </span>
+          Acessos: {totalAcessos !== null
+            ? totalAcessos.toLocaleString('pt-BR')
+            : '...'}
+        </p>
 
         <div className="footer-links">
           <a
