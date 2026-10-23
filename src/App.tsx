@@ -124,7 +124,8 @@ function App() {
   const [showThemeMenu, setShowThemeMenu] = useState(false)
   const [showRules, setShowRules] = useState(false)
   const [showCompletionModal, setShowCompletionModal] = useState(false)
-
+  const [startedAt, setStartedAt] = useState<number | null>(null)
+  const [finishedAt, setFinishedAt] = useState<number | null>(null)
   const totalSquares = boardSize * boardSize
 
   const current = history[history.length - 1]
@@ -149,21 +150,20 @@ function App() {
     solutionPath !== null &&
     animationIndex < solutionPath.length
 
-  useEffect(() => {
-    if (completed) setShowCompletionModal(true)
-  }, [completed])
-
   // Conta o tempo apenas enquanto a partida está ativa.
   // A contagem pausa junto com a resolução automática pausada.
+  // Atualiza o visor com base no tempo real decorrido.
   useEffect(() => {
-    if (history.length === 0 || completed || (resolving && !isPlaying)) return
-
+    if (startedAt === null || finishedAt !== null) return
+  
     const interval = window.setInterval(() => {
-      setElapsedSeconds((seconds) => seconds + 1)
-    }, 1000)
-
+      setElapsedSeconds(
+        Math.floor((Date.now() - startedAt) / 1000)
+      )
+    }, 100)
+  
     return () => window.clearInterval(interval)
-  }, [history.length, completed, resolving, isPlaying])
+  }, [startedAt, finishedAt])
 
   function formatTime(totalSeconds: number): string {
     const minutes = Math.floor(totalSeconds / 60)
@@ -220,6 +220,21 @@ function App() {
     }
   }, [showRules])
 
+  useEffect(() => {
+    if (!completed) return
+  
+    const now = Date.now()
+  
+    setFinishedAt(now)
+  
+    if (startedAt !== null) {
+      setElapsedSeconds(
+        Math.floor((now - startedAt) / 1000)
+      )
+    }
+  
+    setShowCompletionModal(true)
+  }, [completed, startedAt])
 
   useEffect(() => {
     if (!showThemeMenu) return
@@ -235,6 +250,8 @@ function App() {
     setHistory([])
     setRetrocessos(0)
     setElapsedSeconds(0)
+    setStartedAt(null)
+    setFinishedAt(null)
     setIsPlaying(false)
     setSolutionPath(null)
     setAnimationIndex(0)
@@ -258,7 +275,13 @@ function App() {
     if (completed || resolving) return
 
     if (!current) {
+      const now = Date.now()
+    
+      setStartedAt(now)
+      setFinishedAt(null)
+      setElapsedSeconds(0)
       setHistory([position])
+    
       return
     }
 
@@ -294,6 +317,13 @@ function App() {
       return
     }
 
+    if (startedAt === null) {
+      const now = Date.now()
+      setStartedAt(now)
+      setFinishedAt(null)
+      setElapsedSeconds(0)
+    }
+    
     setHistory(initialPath)
     setSolutionPath(result)
     setAnimationIndex(initialPath.length)
